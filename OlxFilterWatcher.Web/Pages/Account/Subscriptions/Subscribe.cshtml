@@ -1,0 +1,20 @@
+﻿@page
+@model OlxFilterWatcher.Web.Pages.Account.Subscriptions.SubscribeModel
+
+@{
+    ViewData["Title"] = "Subscribe";
+}
+
+<header>
+    <h1>@ViewData["Title"]</h1>
+    @{
+        if (User.Identity.IsAuthenticated)
+        {
+            
+        }
+        else
+        {
+            <p>Login first.</p>
+        }
+    }
+</header>

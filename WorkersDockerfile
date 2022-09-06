@@ -1,0 +1,23 @@
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/runtime:6.0 AS base
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY ["OlxFilterWatcher.Workers/OlxFilterWatcher.Workers.csproj", "OlxFilterWatcher.Workers/"]
+COPY ["OlxFilterWatcher.Services/OlxFilterWatcher.Services.csproj", "OlxFilterWatcher.Services/"]
+COPY ["OlxFilterWatcher.Domain/OlxFilterWatcher.Domain.csproj", "OlxFilterWatcher.Domain/"]
+COPY ["OlxFilterWatcher.Infrastructure/OlxFilterWatcher.Infrastructure.csproj", "OlxFilterWatcher.Infrastructure/"]
+RUN dotnet restore "OlxFilterWatcher.Workers/OlxFilterWatcher.Workers.csproj"
+COPY . .
+WORKDIR "/src/OlxFilterWatcher.Workers"
+RUN dotnet build "OlxFilterWatcher.Workers.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "OlxFilterWatcher.Workers.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "OlxFilterWatcher.Workers.dll"]

@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OlxFilterWatcher.API", "OlxFilterWatcher.API\OlxFilterWatcher.API.csproj", "{F2DCAC8A-92E5-44C1-94D6-C37294B9F665}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OlxFilterWatcher.Services", "OlxFilterWatcher.Services\OlxFilterWatcher.Services.csproj", "{4179A0ED-788F-4B5E-87C4-394DC73C9A89}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OlxFilterWatcher.Domain", "OlxFilterWatcher.Domain\OlxFilterWatcher.Domain.csproj", "{B9DA3318-91E4-4D1D-9AA6-7037B1F7B22B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OlxFilterWatcher.Infrastructure", "OlxFilterWatcher.Infrastructure\OlxFilterWatcher.Infrastructure.csproj", "{E9E14200-7C74-419C-A2AA-4B0A111E279A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OlxFilterWatcher.Workers", "OlxFilterWatcher.Workers\OlxFilterWatcher.Workers.csproj", "{6A7D0F03-5916-4A6C-BBA3-D5A8CAFFE500}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OlxFilterWatcher.Web", "OlxFilterWatcher.Web\OlxFilterWatcher.Web.csproj", "{3C300394-69D7-4C6A-B4B9-8E4386E78D49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F2DCAC8A-92E5-44C1-94D6-C37294B9F665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2DCAC8A-92E5-44C1-94D6-C37294B9F665}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2DCAC8A-92E5-44C1-94D6-C37294B9F665}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2DCAC8A-92E5-44C1-94D6-C37294B9F665}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4179A0ED-788F-4B5E-87C4-394DC73C9A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4179A0ED-788F-4B5E-87C4-394DC73C9A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4179A0ED-788F-4B5E-87C4-394DC73C9A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4179A0ED-788F-4B5E-87C4-394DC73C9A89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9DA3318-91E4-4D1D-9AA6-7037B1F7B22B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9DA3318-91E4-4D1D-9AA6-7037B1F7B22B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9DA3318-91E4-4D1D-9AA6-7037B1F7B22B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9DA3318-91E4-4D1D-9AA6-7037B1F7B22B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9E14200-7C74-419C-A2AA-4B0A111E279A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9E14200-7C74-419C-A2AA-4B0A111E279A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9E14200-7C74-419C-A2AA-4B0A111E279A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9E14200-7C74-419C-A2AA-4B0A111E279A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A7D0F03-5916-4A6C-BBA3-D5A8CAFFE500}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A7D0F03-5916-4A6C-BBA3-D5A8CAFFE500}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A7D0F03-5916-4A6C-BBA3-D5A8CAFFE500}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A7D0F03-5916-4A6C-BBA3-D5A8CAFFE500}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C300394-69D7-4C6A-B4B9-8E4386E78D49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C300394-69D7-4C6A-B4B9-8E4386E78D49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C300394-69D7-4C6A-B4B9-8E4386E78D49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C300394-69D7-4C6A-B4B9-8E4386E78D49}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3D278E8-6684-4E8C-B4B3-B5CED99A72F5}
+	EndGlobalSection
+EndGlobal

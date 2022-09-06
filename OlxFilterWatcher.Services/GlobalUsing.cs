@@ -1,0 +1,15 @@
+﻿global using OlxFilterWatcher.Services.Interfaces;
+global using OlxFilterWatcher.Domain.Models;
+global using OlxFilterWatcher.Domain.Models.Base;
+global using OlxFilterWatcher.Services.Services.Base;
+global using OlxFilterWatcher.Domain.DTOs;
+global using OlxFilterWatcher.Infrastructure.Interfaces;
+global using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+global using System.IdentityModel.Tokens.Jwt;
+global using System.Security.Claims;
+global using System.Text;
+global using MongoDB.Driver.Linq;
+global using System.Diagnostics;
+global using MongoDB.Driver;
+global using RestSharp;
+global using System.Text.Json;

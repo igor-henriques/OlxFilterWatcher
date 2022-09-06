@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "OlxFilterWatcher.Workers": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

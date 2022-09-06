@@ -1,0 +1,10 @@
+﻿global using OlxFilterWatcher.Domain.Models.Base;
+global using FluentValidation;
+global using OlxFilterWatcher.Domain.DTOs;
+global using MongoDB.Bson;
+global using Serilog;
+global using Serilog.Events;
+global using MongoDB.Bson.Serialization.Attributes;
+global using Serilog.Exceptions;
+global using Serilog.Filters;
+global using System.Text.RegularExpressions;
