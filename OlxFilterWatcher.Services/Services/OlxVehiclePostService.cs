@@ -11,7 +11,7 @@ public sealed class OlxVehiclePostService : IOlxVehiclePostService
 		this.mapper = mapper;
 	}
 
-	public async ValueTask AddAsync(OlxVehiclePostDTO olxPostDTO, CancellationToken cancellationToken = default)
+	public async Task AddAsync(OlxVehiclePostDTO olxPostDTO, CancellationToken cancellationToken = default)
 	{
 		if (olxPostDTO is null)
 			return;

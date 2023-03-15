@@ -23,7 +23,7 @@ public class HtmlBuilder
         StringBuilder htmlBuilder = new(html);
         StringBuilder paragraphBuilder = new();
 
-        paragraphBuilder.AppendLine(InsertParagraphToHtml("Postado em", olxPostDTO.TimePosted.ToString("dd/MM/yyyy") + " " + olxPostDTO.TimePosted.ToString("HH:mm")));
+        paragraphBuilder.AppendLine(InsertParagraphToHtml("Postado em", olxPostDTO.BrazilianDateTimeOffset.ToString("dd/MM/yyyy") + " " + olxPostDTO.BrazilianDateTimeOffset.ToString("HH:mm")));
         paragraphBuilder.AppendLine(InsertParagraphToHtml("Título", olxPostDTO.Title));
         paragraphBuilder.AppendLine(InsertParagraphToHtml("Preço", olxPostDTO.PostPrice.ToString("c", CultureInfo.GetCultureInfo("pt-BR"))));
 

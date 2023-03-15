@@ -5,7 +5,7 @@ builder.Host.UseSerilog(Log.Logger);
 
 try
 {
-    var mongoDbConnectionString = builder.Configuration.GetValue<string>("ConnectionStrings:MongoDb");
+    var mongoDbConnectionString = builder.Configuration.GetConnectionString("MongoDb");
 
     builder.Services.AddCors();
     builder.Services.AddEndpointsApiExplorer();

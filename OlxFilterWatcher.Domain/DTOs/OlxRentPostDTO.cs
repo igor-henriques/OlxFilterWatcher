@@ -1,6 +1,6 @@
 ﻿namespace OlxFilterWatcher.Domain.DTOs;
 
-public record OlxRentPostDTO : OlxGeneralPostDTO
+public sealed record OlxRentPostDTO : OlxGeneralPostDTO
 {
     public byte RoomCount { get; init; }
     public double PlaceM2 { get; init; }
@@ -24,7 +24,7 @@ public record OlxRentPostDTO : OlxGeneralPostDTO
 
     public OlxRentPostDTO() { }
 
-    public new Type GetPostType()
+    public override Type GetPostType()
     {
         return typeof(OlxRentPostDTO);
     }

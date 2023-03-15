@@ -30,6 +30,7 @@ public static class HtmlElements
     public const string Vaga = "vaga";
     public const string Empty = "";
     public const string Dt = "//dt";
+    public const string Span = "//span";
     public const string Localizacao = "Localização:";
     public const string AnuncioPublicadoEm = "Anúncio publicado em:";
     public const string AutosPecasLink = "/autos-e-pecas";

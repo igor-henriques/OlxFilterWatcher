@@ -9,7 +9,7 @@ public static class ConfigureWorkerEndpoints
             [FromServices] IWorkerSettingsService olxFilterService,
             CancellationToken cancellationToken) =>
         {
-            if (await olxFilterService.UpdateAsync(workerSettings))
+            if (await olxFilterService.UpdateAsync(workerSettings, cancellationToken))
                 return Results.NoContent();
 
             return Results.BadRequest();

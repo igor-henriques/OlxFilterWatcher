@@ -1,4 +1,7 @@
-﻿namespace OlxFilterWatcher.Workers.Workers;
+﻿using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
+
+namespace OlxFilterWatcher.Workers.Workers;
 
 public class OlxScraperWorker : BackgroundService
 {
@@ -99,7 +102,7 @@ public class OlxScraperWorker : BackgroundService
     {
         CancellationTokenSource cts = new();
 
-        cts.CancelAfter(TimeSpan.FromMinutes(3));
+        cts.CancelAfter(TimeSpan.FromMinutes(30));
 
         return Task.Run(async () =>
         {
@@ -155,8 +158,6 @@ public class OlxScraperWorker : BackgroundService
             }
 
             filterHandler.ResetTimer(filter);
-
-            GC.Collect(generation: 2, mode: GCCollectionMode.Optimized, blocking: true);
         }, cts.Token);
     }
 
@@ -179,9 +180,9 @@ public class OlxScraperWorker : BackgroundService
 
         var postPage = await web.LoadFromWebAsync(postUrl, cancellationToken);
         var postImages = !GetPostImageUrl(record.post, record.index).Contains(HtmlElements.NotFound) ? GetPostDetailedImagesUrl(postPage.DocumentNode, title) : default;
-        var toiletsCount = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.Banheiros) ?? "NÃO INFORMADO";
-        var iptuTax = (GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.IPTU)?.ToDecimal()).GetValueOrDefault();
-        var zipCode = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.CEP);
+        var toiletsCount = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.Banheiros, HtmlElements.Dt) ?? "NÃO INFORMADO";
+        var iptuTax = (GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.IPTU, HtmlElements.Dt)?.ToDecimal()).GetValueOrDefault();
+        var zipCode = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.CEP, HtmlElements.Dt);
 
         OlxRentPostDTO newOlxPost = new(            
             postUrl,
@@ -208,8 +209,10 @@ public class OlxScraperWorker : BackgroundService
                                                   .ToList()
         };
 
-        await olxRentPostService.AddAsync(newOlxPost, cancellationToken);
-        await olxNotificationService.AddAsync(notification, cancellationToken);
+        var addRentPostTask = olxRentPostService.AddAsync(newOlxPost, cancellationToken);
+        var addNotificationTask = olxNotificationService.AddAsync(notification, cancellationToken);
+
+        await Task.WhenAll(addRentPostTask, addNotificationTask);
     }
     private async Task BuildVehiclePost((HtmlNode post, int index) record, string filter, string postUrl, CancellationToken cancellationToken)
     {
@@ -221,12 +224,11 @@ public class OlxScraperWorker : BackgroundService
         var title = GetPostTitle(record.post);
         var postImage = GetPostImageUrl(record.post, record.index);
         var price = GetPostPrice(record.post, record.index);
-        var postGeneralInformations = GetPostDetailedInformations(record.post, record.index);
         var location = GetPostLocation(record.post, record.index);
         var timePosted = GetPostTimePosted(record.post, record.index).ToDateTime();
         var postPage = await web.LoadFromWebAsync(postUrl, cancellationToken);
         var postImages = !postImage.Contains(HtmlElements.NotFound) ? GetPostDetailedImagesUrl(postPage.DocumentNode, title) : default;
-        var zipCode = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.CEP);
+        var zipCode = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.CEP, HtmlElements.Dt);
         var vehicleYear = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.Ano) ?? "NÃO INFORMADO";
         var vehicleKmCount = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.Quilometragem) ?? "NÃO INFORMADO";
         var vehicleTransmission = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.Cambio) ?? "NÃO INFORMADO";
@@ -254,8 +256,10 @@ public class OlxScraperWorker : BackgroundService
                                                   .ToList()
         };
 
-        await olxVehiclePostService.AddAsync(newOlxPost, cancellationToken);
-        await olxNotificationService.AddAsync(notification, cancellationToken);
+        var addVehiclePostTask = olxVehiclePostService.AddAsync(newOlxPost, cancellationToken);
+        var addNotificationTask = olxNotificationService.AddAsync(notification, cancellationToken);
+
+        await Task.WhenAll(addVehiclePostTask, addNotificationTask);
     }
 
     private async Task BuildGeneralPost((HtmlNode post, int index) record, string filter, string postUrl, CancellationToken cancellationToken)
@@ -272,7 +276,7 @@ public class OlxScraperWorker : BackgroundService
         var timePosted = GetPostTimePosted(record.post, record.index).ToDateTime();
         var postPage = await web.LoadFromWebAsync(postUrl, cancellationToken);
         var postImages = !postImage.Contains(HtmlElements.NotFound) ? GetPostDetailedImagesUrl(postPage.DocumentNode, title) : default;
-        var zipCode = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.CEP);
+        var zipCode = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.CEP, HtmlElements.Dt);
 
         OlxGeneralPostDTO newOlxPost = new(
             postUrl,
@@ -293,8 +297,10 @@ public class OlxScraperWorker : BackgroundService
                                                   .ToList()
         };
 
-        await olxGeneralPostService.AddAsync(newOlxPost, cancellationToken);
-        await olxNotificationService.AddAsync(notification, cancellationToken);
+        var addGeneralPostTask = olxGeneralPostService.AddAsync(newOlxPost, cancellationToken);
+        var addNotificationTask = olxNotificationService.AddAsync(notification, cancellationToken);
+
+        await Task.WhenAll(addGeneralPostTask, addNotificationTask);
     }
 
     private static string GetPostTitle(HtmlNode node)
@@ -363,14 +369,28 @@ public class OlxScraperWorker : BackgroundService
     }
     private static List<string> GetPostDetailedImagesUrl(HtmlNode node, string title)
     {
-        return node.SelectNodes(HtmlElements.PostDetailedImagesXPath)
-                  ?.Where(d => d.GetAttributeValue(HtmlElements.Alt, HtmlElements.Empty).Contains(title))
-                  ?.Select(d => d.GetAttributeValue(HtmlElements.Src, HtmlElements.Empty))
-                  ?.ToList();
+        var escapedTitle = Regex.Escape(title);
+        var jsonRegexPattern = $@"\{{&quot;original&quot;:&quot;.*?&quot;,&quot;originalAlt&quot;:&quot;.*{escapedTitle}.*?&quot;,&quot;thumbnail&quot;:&quot;.*?&quot;\}}";
+        var jsonRegex = new Regex(jsonRegexPattern);
+        var jsonMatch = jsonRegex.Match(node.InnerHtml);
+        var jsonString = $"[{jsonMatch.Value.Replace("&quot;", "\"")}]";
+        var jsonArray = JArray.Parse(jsonString);
+        var imageUrls = jsonArray.Select(x => x["original"].ToString()).ToList();
+
+        return imageUrls;
     }
     private static string GetInformationFromPostPage(HtmlNode node, string innerText)
     {
-        return node.SelectNodes(HtmlElements.Dt)
+        return node.SelectNodes(HtmlElements.Span)
+                  ?.Where(d => d.InnerText.Equals(innerText))
+                  ?.FirstOrDefault()
+                  ?.NextSibling
+                  ?.InnerText;
+    }
+
+    private static string GetInformationFromPostPage(HtmlNode node, string innerText, string byNode)
+    {
+        return node.SelectNodes(byNode)
                   ?.Where(d => d.InnerText.Equals(innerText))
                   ?.FirstOrDefault()
                   ?.NextSibling

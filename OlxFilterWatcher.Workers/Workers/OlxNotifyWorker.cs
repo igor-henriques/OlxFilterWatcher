@@ -34,7 +34,7 @@ public class OlxNotifyWorker : BackgroundService
     {
         try
         {            
-            this.BaseHTML = await HtmlBuilder.GetBaseHTML(stoppingToken);
+            this.BaseHTML ??= await HtmlBuilder.GetBaseHTML(stoppingToken);
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -70,7 +70,8 @@ public class OlxNotifyWorker : BackgroundService
 
                     var emailsToSentEmail = FilterEmailsAlreadyNotified(item);
 
-                    if (await NotifyAsync(emailsToSentEmail, post, item.URL, cts.Token))
+                    var isSuccessfullyNotified = await NotifyAsync(emailsToSentEmail, post, item.URL, cts.Token);
+                    if (isSuccessfullyNotified)
                     {
                         item.EmailsNotifiedCallback(emailsToSentEmail);
                         await notificationService.UpdateAsync(item, cts.Token);

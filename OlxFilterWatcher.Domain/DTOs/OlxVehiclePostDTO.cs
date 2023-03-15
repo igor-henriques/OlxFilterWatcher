@@ -1,5 +1,6 @@
 ﻿namespace OlxFilterWatcher.Domain.DTOs;
-public record OlxVehiclePostDTO : OlxGeneralPostDTO
+
+public sealed record OlxVehiclePostDTO : OlxGeneralPostDTO
 {    
     public string Year { get; init; }
     public string KmCount { get; init; }
@@ -15,7 +16,7 @@ public record OlxVehiclePostDTO : OlxGeneralPostDTO
         Transmission = transmission;
     }
 
-    public new Type GetPostType()
+    public override Type GetPostType()
     {
         return typeof(OlxVehiclePostDTO);
     }

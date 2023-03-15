@@ -10,6 +10,7 @@ public record OlxGeneralPostDTO
     public DateTime TimePosted { get; init; }
     public List<string> Images { get; init; }
     public string FoundByFilter { get; init; }
+    public DateTime BrazilianDateTimeOffset => TimePosted.AddHours(-3);
 
     public OlxGeneralPostDTO(string url, string title, decimal postPrice, string location, 
         string zipCode, DateTime timePosted, List<string> images, string foundByFilter)
@@ -26,8 +27,8 @@ public record OlxGeneralPostDTO
 
     public OlxGeneralPostDTO() { }
 
-    public Type GetPostType()
+    public virtual Type GetPostType()
     {
         return typeof(OlxGeneralPostDTO);
-    }
+    }    
 }
