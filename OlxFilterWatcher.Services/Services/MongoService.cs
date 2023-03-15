@@ -1,17 +1,17 @@
 ﻿namespace OlxFilterWatcher.Services.Services;
 
-public class MongoService<T> : BaseMongoService, IMongoService<T> where T : BaseMongoModel
+public sealed class MongoService<T> : BaseMongoService, IMongoService<T> where T : BaseMongoModel
 {
     private const string databaseName = "olxfilterwatcher";
     private readonly IMongoCollection<T> collection;
 
     public MongoService(string connectionString) : base(connectionString)
     {
-        this.collection = base.client.GetDatabase(databaseName)
-                                     .GetCollection<T>(GetCollectionName());
+        this.collection = base._client.GetDatabase(databaseName)
+                                      .GetCollection<T>(GetCollectionName());
     }
 
-    private string GetCollectionName()
+    private static string GetCollectionName()
     {
         return typeof(T).Name switch
         {
@@ -63,28 +63,28 @@ public class MongoService<T> : BaseMongoService, IMongoService<T> where T : Base
     {
         var response = await collection.FindAsync<T>(filter, findOptions, cancellationToken);
 
-        return await response.ToListAsync();
+        return await response.ToListAsync(cancellationToken);
     }
 
     public async Task<T> FindOneAsync(FilterDefinition<T> filter, FindOptions<T, T> findOptions = null, CancellationToken cancellationToken = default)
     {
         var response = await collection.FindAsync<T>(filter, findOptions, cancellationToken);
 
-        return await response.FirstOrDefaultAsync();
+        return await response.FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<TField>> DistinctAsync<TField>(FieldDefinition<T, TField> field, FilterDefinition<T> filter, CancellationToken cancellationToken = default)
     {
         var response = await collection.DistinctAsync<TField>(field, filter, null, cancellationToken);        
 
-        return await response.ToListAsync();
+        return await response.ToListAsync(cancellationToken);
     }
 
     public async Task<bool> AnyAsync(FilterDefinition<T> filter, CancellationToken cancellationToken = default)
     {
         var response = await collection.FindAsync<T>(filter, null, cancellationToken);
 
-        return await response.AnyAsync();
+        return await response.AnyAsync(cancellationToken);
     }
 
     public async Task<bool> FindAndUpdateAsync(FilterDefinition<T> filter, UpdateDefinition<T> update, CancellationToken cancellationToken = default)
@@ -100,6 +100,6 @@ public class MongoService<T> : BaseMongoService, IMongoService<T> where T : Base
 
         var response = await collection.FindAsync(searchFilter, null, cancellationToken);
 
-        return await response.FirstOrDefaultAsync();
+        return await response.FirstOrDefaultAsync(cancellationToken);
     }
 }

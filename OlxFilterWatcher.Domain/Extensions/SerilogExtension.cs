@@ -1,6 +1,6 @@
 ﻿namespace OlxFilterWatcher.Domain.Utils;
 
-public class SerilogExtension
+public static class SerilogExtension
 {
     public static void AddSerilogApi()
     {

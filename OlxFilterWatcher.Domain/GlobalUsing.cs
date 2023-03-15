@@ -8,3 +8,5 @@ global using MongoDB.Bson.Serialization.Attributes;
 global using Serilog.Exceptions;
 global using Serilog.Filters;
 global using System.Text.RegularExpressions;
+global using OlxFilterWatcher.Domain.Models;
+global using MongoDB.Driver;

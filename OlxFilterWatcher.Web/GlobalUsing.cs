@@ -9,7 +9,7 @@ global using Microsoft.AspNetCore.Mvc.RazorPages;
 global using Microsoft.AspNetCore.WebUtilities;
 global using OlxFilterWatcher.Web.Models;
 global using Microsoft.EntityFrameworkCore;
-global using OlxFilterWatcher.Services.Interfaces;
+global using OlxFilterWatcher.Domain.Interfaces;
 global using OlxFilterWatcher.Services.Services;
 global using OlxFilterWatcher.Web.Data;
 global using Microsoft.AspNetCore.Authentication;

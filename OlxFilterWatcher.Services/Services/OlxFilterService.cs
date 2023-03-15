@@ -1,6 +1,6 @@
 ﻿namespace OlxFilterWatcher.Services.Services;
 
-public class OlxFilterService : IOlxFilterService
+public sealed class OlxFilterService : IOlxFilterService
 {
     private DateTime LastTimeUpdated;
     private readonly IMongoService<OlxFilter> mongoService;

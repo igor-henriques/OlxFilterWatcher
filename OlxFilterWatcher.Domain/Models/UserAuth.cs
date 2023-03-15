@@ -8,7 +8,7 @@ public sealed record UserAuth : BaseMongoModel
         
     public static UserAuth MainUser
     {
-        get => new UserAuth() 
+        get => new() 
         { 
             Email = "contato@ironside.dev", 
             Password = "MyHXMJ3dEMiJQNGHOADzQO4E3bb+1b7sEDh833w624M=", //TTTTTTTTeste1!

@@ -1,4 +1,4 @@
-﻿namespace OlxFilterWatcher.Services.Interfaces;
+﻿namespace OlxFilterWatcher.Domain.Interfaces;
 
 public interface IMongoService<T> where T : BaseMongoModel
 {

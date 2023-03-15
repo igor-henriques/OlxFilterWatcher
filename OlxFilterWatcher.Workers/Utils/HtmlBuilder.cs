@@ -20,8 +20,8 @@ public class HtmlBuilder
             return null;
         }).Where(img => img is not null).ToList();
 
-        StringBuilder htmlBuilder = new StringBuilder(html);
-        StringBuilder paragraphBuilder = new StringBuilder();
+        StringBuilder htmlBuilder = new(html);
+        StringBuilder paragraphBuilder = new();
 
         paragraphBuilder.AppendLine(InsertParagraphToHtml("Postado em", olxPostDTO.TimePosted.ToString("dd/MM/yyyy") + " " + olxPostDTO.TimePosted.ToString("HH:mm")));
         paragraphBuilder.AppendLine(InsertParagraphToHtml("Título", olxPostDTO.Title));
@@ -59,7 +59,7 @@ public class HtmlBuilder
 
     public static string InsertParagraphToHtml(string information, string content)
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
 
         sb.AppendLine("<p style=\"margin: 0; margin-bottom: 16px;\">");
         sb.AppendLine(string.Format("<b>{0}:</b> {1}", information, content));
@@ -70,7 +70,7 @@ public class HtmlBuilder
     
     private static string InsertImagesDescription()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
 
         sb.AppendLine("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"heading_block block-4\" role=\"presentation\" style=\"mso-table-lspace: 0pt; mso-table-rspace: 0pt;\" width=\"100%\">");
         sb.AppendLine("<tr>");
@@ -87,7 +87,7 @@ public class HtmlBuilder
 
     private static string InsertImageToHtml(string imageUrl)
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
 
         sb.AppendLine("<table border=\"0\" cellpadding=\"15\" cellspacing=\"0\"=\" \"class=\"image_block block-8\" role=\"presentation\" style=\"mso-table-lspace: 0pt; mso-table-rspace: 0pt;\" width=\"100%\">");
         sb.AppendLine("<tr>");

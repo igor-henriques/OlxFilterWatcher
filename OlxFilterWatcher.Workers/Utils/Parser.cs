@@ -2,7 +2,7 @@
 
 public static class Parser
 {
-    private static Dictionary<string, int> monthKeyValues = new Dictionary<string, int>()
+    private static readonly Dictionary<string, int> monthKeyValues = new()
     {
         { "jan", 1 },
         { "fev", 2 },
@@ -20,14 +20,14 @@ public static class Parser
 
     public static int ToInt(this string text)
     {
-        int.TryParse(new string(text?.Where(c => char.IsDigit(c))?.ToArray()), out int result);
+        _ = int.TryParse(new string(text?.Where(c => char.IsDigit(c))?.ToArray()), out int result);
 
         return result;
     }
 
     public static decimal ToDecimal(this string text)
     {
-        decimal.TryParse(new string(text?.Where(c => char.IsDigit(c))?.ToArray()), out decimal result);
+        _ = decimal.TryParse(new string(text?.Where(c => char.IsDigit(c))?.ToArray()), out decimal result);
 
         return result;
     }

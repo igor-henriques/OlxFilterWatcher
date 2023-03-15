@@ -28,7 +28,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\OlxFilterWatcher.Services\OlxFilterWatcher.Services.csproj" />
+		<ProjectReference Include="..\OlxFilterWatcher.Infrastructure.Boot\OlxFilterWatcher.Infrastructure.Boot.csproj" />
+		<ProjectReference Include="..\OlxFilterWatcher.Services\OlxFilterWatcher.Infrastructure.Services.csproj" />
 	</ItemGroup>
 
 </Project>

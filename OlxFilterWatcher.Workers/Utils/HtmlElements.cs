@@ -1,6 +1,6 @@
 ﻿namespace OlxFilterWatcher.Workers.Utils;
 
-public record HtmlElements
+public static class HtmlElements
 {
     public const string PostDivXPath = "//li/div/a";
     public const string PostImageXPath = "//div/div/div/div/img";

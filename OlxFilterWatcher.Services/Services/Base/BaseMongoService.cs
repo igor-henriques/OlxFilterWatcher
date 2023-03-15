@@ -2,10 +2,10 @@
 
 public abstract class BaseMongoService
 {
-    protected readonly MongoClient client;
+    protected readonly MongoClient _client;
 
     public BaseMongoService(string connectionString)
     {
-        client = new MongoClient(connectionString);
+        _client = new MongoClient(connectionString);
     }
 }

@@ -40,21 +40,21 @@ public class OlxScraperWorker : BackgroundService
                 if (!await CheckWorkerStateAsync(stoppingToken))
                 {
                     Log.Information($"{nameof(OlxScraperWorker)} isn't active. Re-checking...");
-                    await Task.Delay(TimeSpan.FromMinutes(5));
+                    await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
                     continue;
                 }
 
                 filterHandler.UpdateFilters(await olxFilterService.GetFiltersAsync(stoppingToken));
 
-                if (!(await olxFilterService.GetFiltersAsync()).Any())
+                if (!(await olxFilterService.GetFiltersAsync(stoppingToken)).Any())
                 {
-                    await Task.Delay(TimeSpan.FromMinutes(1));
+                    await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
                     continue;
                 }
 
                 await ProcessFilters(olxFilterService.Filters);
 
-                await Task.Delay(TimeSpan.FromSeconds(1));
+                await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
             }
         }
         catch (Exception e)
@@ -72,7 +72,7 @@ public class OlxScraperWorker : BackgroundService
     {
         try
         {
-            List<Task> tasks = new List<Task>();
+            List<Task> tasks = new();
 
             Parallel.ForEach(filters, (string filter) =>
             {
@@ -97,7 +97,7 @@ public class OlxScraperWorker : BackgroundService
 
     private Task BuildTask(string filter)
     {
-        CancellationTokenSource cts = new CancellationTokenSource();
+        CancellationTokenSource cts = new();
 
         cts.CancelAfter(TimeSpan.FromMinutes(3));
 
@@ -177,7 +177,7 @@ public class OlxScraperWorker : BackgroundService
         var location = GetPostLocation(record.post, record.index);
         var timePosted = GetPostTimePosted(record.post, record.index).ToDateTime();
 
-        var postPage = await web.LoadFromWebAsync(postUrl);
+        var postPage = await web.LoadFromWebAsync(postUrl, cancellationToken);
         var postImages = !GetPostImageUrl(record.post, record.index).Contains(HtmlElements.NotFound) ? GetPostDetailedImagesUrl(postPage.DocumentNode, title) : default;
         var toiletsCount = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.Banheiros) ?? "NÃO INFORMADO";
         var iptuTax = (GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.IPTU)?.ToDecimal()).GetValueOrDefault();
@@ -224,7 +224,7 @@ public class OlxScraperWorker : BackgroundService
         var postGeneralInformations = GetPostDetailedInformations(record.post, record.index);
         var location = GetPostLocation(record.post, record.index);
         var timePosted = GetPostTimePosted(record.post, record.index).ToDateTime();
-        var postPage = await web.LoadFromWebAsync(postUrl);
+        var postPage = await web.LoadFromWebAsync(postUrl, cancellationToken);
         var postImages = !postImage.Contains(HtmlElements.NotFound) ? GetPostDetailedImagesUrl(postPage.DocumentNode, title) : default;
         var zipCode = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.CEP);
         var vehicleYear = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.Ano) ?? "NÃO INFORMADO";
@@ -270,7 +270,7 @@ public class OlxScraperWorker : BackgroundService
         var price = GetPostPrice(record.post, record.index);
         var location = GetPostLocation(record.post, record.index);
         var timePosted = GetPostTimePosted(record.post, record.index).ToDateTime();
-        var postPage = await web.LoadFromWebAsync(postUrl);
+        var postPage = await web.LoadFromWebAsync(postUrl, cancellationToken);
         var postImages = !postImage.Contains(HtmlElements.NotFound) ? GetPostDetailedImagesUrl(postPage.DocumentNode, title) : default;
         var zipCode = GetInformationFromPostPage(postPage.DocumentNode, HtmlElements.CEP);
 
@@ -297,21 +297,21 @@ public class OlxScraperWorker : BackgroundService
         await olxNotificationService.AddAsync(notification, cancellationToken);
     }
 
-    private string GetPostTitle(HtmlNode node)
+    private static string GetPostTitle(HtmlNode node)
     {
         return node.GetAttributeValue(HtmlElements.Title, HtmlElements.Empty);
     }
-    private string GetPostUrl(HtmlNode node)
+    private static string GetPostUrl(HtmlNode node)
     {
         return node.GetAttributeValue(HtmlElements.Href, HtmlElements.Empty);
     }
-    private string GetPostImageUrl(HtmlNode node, int index)
+    private static string GetPostImageUrl(HtmlNode node, int index)
     {
         return node.SelectNodes(HtmlElements.PostImageXPath)
                   ?.ElementAt(index)
                   ?.GetAttributeValue(HtmlElements.Src, HtmlElements.Empty);
     }
-    private decimal GetPostPrice(HtmlNode node, int index)
+    private static decimal GetPostPrice(HtmlNode node, int index)
     {
         return (decimal)node.SelectNodes(HtmlElements.PostPriceXPath)
                            ?.Where(d => d.GetAttributeValue(HtmlElements.AriaLabel, HtmlElements.Empty).Contains(HtmlElements.PrecoDoItem, StringComparison.CurrentCultureIgnoreCase))
@@ -319,7 +319,7 @@ public class OlxScraperWorker : BackgroundService
                            ?.InnerText
                            ?.ToDecimal();
     }
-    private List<string> GetPostDetailedInformations(HtmlNode node, int index)
+    private static List<string> GetPostDetailedInformations(HtmlNode node, int index)
     {
         var postGeneralInformations = node.SelectNodes(HtmlElements.PostDetailedInformationXPath)
                                          ?.Where(d => d.GetAttributeValue(HtmlElements.AriaLabel, HtmlElements.Empty).Equals(HtmlElements.InformacoesAnuncio, StringComparison.CurrentCultureIgnoreCase))
@@ -331,44 +331,44 @@ public class OlxScraperWorker : BackgroundService
                                       .Where(p => !string.IsNullOrEmpty(p))
                                       .ToList();
     }
-    private int GetPostRoomCount(List<string> detailedInformations)
+    private static int GetPostRoomCount(List<string> detailedInformations)
     {
         return detailedInformations.Where(x => x.Contains(HtmlElements.Quartos, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault().ToInt();
     }
-    private int GetPostPlaceM2(List<string> detailedInformations)
+    private static int GetPostPlaceM2(List<string> detailedInformations)
     {
         return detailedInformations.Where(x => x.Contains(HtmlElements.M2, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault().ToInt();
     }
-    private decimal GetPostCondominiumTax(List<string> detailedInformations)
+    private static decimal GetPostCondominiumTax(List<string> detailedInformations)
     {
         return detailedInformations.Where(x => x.Contains(HtmlElements.Condominio, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault().ToDecimal();
     }
-    private int GetCarSpotCount(List<string> detailedInformations)
+    private static int GetCarSpotCount(List<string> detailedInformations)
     {
         return detailedInformations.Where(x => x.Contains(HtmlElements.Vaga, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault().ToInt();
     }
-    private string GetPostLocation(HtmlNode node, int index)
+    private static string GetPostLocation(HtmlNode node, int index)
     {
         return node.SelectNodes(HtmlElements.PostLocationXPath)
                   ?.Where(d => d.GetAttributeValue(HtmlElements.AriaLabel, HtmlElements.Empty).Contains(HtmlElements.Localizacao))
                   ?.ElementAt(index)
                   ?.InnerText;
     }
-    private string GetPostTimePosted(HtmlNode node, int index)
+    private static string GetPostTimePosted(HtmlNode node, int index)
     {
         return node.SelectNodes(HtmlElements.PostTimePostedXPath)
                   ?.Where(d => d.GetAttributeValue(HtmlElements.AriaLabel, HtmlElements.Empty).Contains(HtmlElements.AnuncioPublicadoEm))
                   ?.ElementAt(index)
                   ?.InnerText;
     }
-    private List<string> GetPostDetailedImagesUrl(HtmlNode node, string title)
+    private static List<string> GetPostDetailedImagesUrl(HtmlNode node, string title)
     {
         return node.SelectNodes(HtmlElements.PostDetailedImagesXPath)
                   ?.Where(d => d.GetAttributeValue(HtmlElements.Alt, HtmlElements.Empty).Contains(title))
                   ?.Select(d => d.GetAttributeValue(HtmlElements.Src, HtmlElements.Empty))
                   ?.ToList();
     }
-    private string GetInformationFromPostPage(HtmlNode node, string innerText)
+    private static string GetInformationFromPostPage(HtmlNode node, string innerText)
     {
         return node.SelectNodes(HtmlElements.Dt)
                   ?.Where(d => d.InnerText.Equals(innerText))

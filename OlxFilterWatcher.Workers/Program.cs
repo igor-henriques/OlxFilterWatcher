@@ -1,6 +1,12 @@
 ﻿SerilogExtension.AddSerilogApi();
 
-const string mongoDbConnectionString = "";
+var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+            .Build();
+
+string mongoDbConnectionString = configuration.GetConnectionString("MongoDb");
 
 try
 {

@@ -1,7 +1,7 @@
 ﻿global using Microsoft.Extensions.Hosting;
 global using OlxFilterWatcher.Domain.DTOs;
 global using OlxFilterWatcher.Workers.Utils;
-global using OlxFilterWatcher.Services.Interfaces;
+global using OlxFilterWatcher.Domain.Interfaces;
 global using FluentValidation;
 global using OlxFilterWatcher.Domain.Models;
 global using OlxFilterWatcher.Domain.Validators;
@@ -18,3 +18,4 @@ global using OlxFilterWatcher.Domain.Utils;
 global using System.Text.Json;
 global using OlxFilterWatcher.Domain.Models.Base;
 global using System.Globalization;
+global using Microsoft.Extensions.Configuration;

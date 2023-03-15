@@ -41,11 +41,11 @@ public class OlxNotifyWorker : BackgroundService
                 if (!await CheckWorkerStateAsync(stoppingToken))
                 {
                     Log.Information($"{nameof(OlxNotifyWorker)} isn't active. Re-checking...");
-                    await Task.Delay(TimeSpan.FromMinutes(5));
+                    await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
                     continue;
                 }
 
-                CancellationTokenSource cts = new CancellationTokenSource();
+                CancellationTokenSource cts = new();
 
                 cts.CancelAfter(TimeSpan.FromMinutes(3));
 
@@ -103,7 +103,7 @@ public class OlxNotifyWorker : BackgroundService
         catch (Exception) { return false; }
     }
 
-    private IEnumerable<string> FilterEmailsAlreadyNotified(OlxNotificationDTO notification)
+    private static IEnumerable<string> FilterEmailsAlreadyNotified(OlxNotificationDTO notification)
     {
         foreach (var notifyCheck in notification.NotifyChecks)
         {

@@ -1,6 +1,6 @@
 ﻿namespace OlxFilterWatcher.Services.Services;
 
-public class MailService : IMailService
+public sealed class MailService : IMailService
 {
     private const string ApiKey = "";
     private const string sentFrom = "";
@@ -22,7 +22,7 @@ public class MailService : IMailService
                 email = sentFrom,
                 name = "noreply"
             },
-            subject = subject,
+            subject,
             content = new[]
             {
                 new
@@ -39,7 +39,7 @@ public class MailService : IMailService
                     {
                         return new
                         {
-                            email = email,
+                            email,
                             name = string.Empty
                         };
                     })
@@ -49,7 +49,7 @@ public class MailService : IMailService
 
         request.AddParameter("application/json", JsonSerializer.Serialize(emailObject), ParameterType.RequestBody);
 
-        var response = await client.ExecuteAsync(request);
+        var response = await client.ExecuteAsync(request, cancellationToken);
 
         return response.ResponseStatus == ResponseStatus.Completed;
     }

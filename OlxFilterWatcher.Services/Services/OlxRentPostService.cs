@@ -1,6 +1,6 @@
 ﻿namespace OlxFilterWatcher.Services.Services;
 
-public class OlxRentPostService : IOlxRentPostService
+public sealed class OlxRentPostService : IOlxRentPostService
 {
 	private readonly IMongoService<OlxRentPost> collection;
 	private readonly IMapper<OlxRentPostDTO, OlxRentPost> mapper;
@@ -16,7 +16,7 @@ public class OlxRentPostService : IOlxRentPostService
 		if (olxPostDTO is null)
 			return;
 
-		if (await AnyAsync(olxPostDTO.URL))
+		if (await AnyAsync(olxPostDTO.URL, cancellationToken))
 			return;
 
 		await collection.AddOneAsync(mapper.Map(olxPostDTO), cancellationToken);

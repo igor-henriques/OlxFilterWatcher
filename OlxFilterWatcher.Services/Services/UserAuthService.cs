@@ -1,6 +1,6 @@
 ﻿namespace OlxFilterWatcher.Services.Services;
 
-public class UserAuthService : IUserAuthService
+public sealed class UserAuthService : IUserAuthService
 {
     private readonly IMapper<UserAuthDTO, UserAuth> mapper;
 
@@ -31,7 +31,7 @@ public class UserAuthService : IUserAuthService
         return await Task.FromResult(false);
     }
 
-    private string EncryptPassword(string password)
+    private static string EncryptPassword(string password)
     {
         string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: password,

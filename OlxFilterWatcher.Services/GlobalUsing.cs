@@ -1,4 +1,4 @@
-﻿global using OlxFilterWatcher.Services.Interfaces;
+﻿global using OlxFilterWatcher.Domain.Interfaces;
 global using OlxFilterWatcher.Domain.Models;
 global using OlxFilterWatcher.Domain.Models.Base;
 global using OlxFilterWatcher.Services.Services.Base;
@@ -13,3 +13,5 @@ global using System.Diagnostics;
 global using MongoDB.Driver;
 global using RestSharp;
 global using System.Text.Json;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.IdentityModel.Tokens;

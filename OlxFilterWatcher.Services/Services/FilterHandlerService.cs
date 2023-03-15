@@ -1,6 +1,6 @@
 ﻿namespace OlxFilterWatcher.Services.Services;
 
-public class FilterHandlerService : IFilterHandlerService
+public sealed class FilterHandlerService : IFilterHandlerService
 {
     private readonly record struct Filter(string FilterName, int Delay = 60_000);    
     private readonly Dictionary<Filter, Stopwatch> filterHandler;

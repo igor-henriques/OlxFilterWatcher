@@ -1,6 +1,6 @@
 ﻿namespace OlxFilterWatcher.Services.Services;
 
-public class WorkerSettingsService : IWorkerSettingsService
+public sealed class WorkerSettingsService : IWorkerSettingsService
 {
     private readonly IMongoService<WorkerSettings> collection;
 

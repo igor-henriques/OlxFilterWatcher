@@ -3,7 +3,7 @@ global using Microsoft.AspNetCore.Mvc;
 global using OlxFilterWatcher.API.Endpoints;
 global using OlxFilterWatcher.Domain.Utils;
 global using OlxFilterWatcher.Services.Services;
-global using OlxFilterWatcher.Services.Interfaces;
+global using OlxFilterWatcher.Domain.Interfaces;
 global using FluentValidation;
 global using OlxFilterWatcher.Domain.Models.Base;
 global using OlxFilterWatcher.Domain.DTOs;

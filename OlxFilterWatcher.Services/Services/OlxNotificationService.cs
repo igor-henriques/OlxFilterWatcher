@@ -1,6 +1,6 @@
 ﻿namespace OlxFilterWatcher.Services.Services;
 
-public class OlxNotificationService : IOlxNotificationService
+public sealed class OlxNotificationService : IOlxNotificationService
 {
     private readonly IMongoService<OlxNotification> collection;
     private readonly IMapper<OlxNotificationDTO, OlxNotification> mapper;

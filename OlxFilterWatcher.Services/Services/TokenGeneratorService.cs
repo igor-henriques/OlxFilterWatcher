@@ -1,9 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+﻿namespace OlxFilterWatcher.Services.Services;
 
-namespace OlxFilterWatcher.Services.Services;
-
-public class TokenGeneratorService : ITokenGeneratorService
+public sealed class TokenGeneratorService : ITokenGeneratorService
 {
     private readonly string _tokenKey;
     private readonly int tokenHoursDuration;
@@ -39,7 +36,7 @@ public class TokenGeneratorService : ITokenGeneratorService
         };
     }
 
-    private IEnumerable<Claim> GetClaims(IEnumerable<string> roles)
+    private static IEnumerable<Claim> GetClaims(IEnumerable<string> roles)
     {
         foreach (var role in roles)
         {
